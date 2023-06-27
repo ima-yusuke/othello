@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section class="container">
+      <h1>Game</h1>
+      <table>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <button>SKIP</button>
+    </section>
+  </body>
+</html>
+<script>
+  // white = 0, balck = 1
+  let fieldArray = [
+    [2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2],
+  ];
+
+  // These two will be used for class name
+  let ballColorWhite = "ballWhite";
+  let ballColorBlack = "ballBlack";
+
+  // To decide who play now
+  let flag = true;
+
+  let tbody = document.getElementsByTagName("tbody")[0];
+
+  // Create new ball if you click td
+  function newBall(e) {
+    // Create new ball and also add class to the ball
+    let selectedTd = e.target;
+    let selectedTr = selectedTd.parentNode;
+    let newDiv = document.createElement("div");
+    if (flag == true) {
+      newDiv.classList.add(ballColorWhite);
+      flag = false;
+    } else {
+      newDiv.classList.add(ballColorBlack);
+      flag = true;
+    }
+    selectedTd.appendChild(newDiv);
+
+    // Checking the number of child elements and storing them in the trIndex and tdIndex
+    let trs = document.getElementsByTagName("tr");
+    trs = [].slice.call(trs);
+    let trIndex = trs.indexOf(selectedTr);
+
+    let selectedTds = selectedTr.children;
+    selectedTds = [].slice.call(selectedTds);
+    let tdIndex = selectedTds.indexOf(selectedTd);
+
+    if (flag == true) {
+      // black
+
+      // Side (横)
+      fieldArray[trIndex][tdIndex] = 1;
+      let minTdIndex = null;
+      let maxTdIndex = null;
+
+      // Finding minTdIndex and maxTdIndex
+      for (let i = 0; i < fieldArray[trIndex].length; i++) {
+        if (
+          minTdIndex != null &&
+          fieldArray[trIndex][i] == 1 &&
+          fieldArray[trIndex][i - 1] == 0
+        ) {
+          maxTdIndex = i;
+        }
+        if (
+          fieldArray[trIndex][i] == 1 &&
+          fieldArray[trIndex][i + 1] == 0 &&
+          minTdIndex == null
+        ) {
+          minTdIndex = i;
+        }
+      }
+
+      if (minTdIndex != null && maxTdIndex != null) {
+        let colorFlag = true;
+        for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
+          // To stop next code
+          if (fieldArray[trIndex][c] == 2) {
+            colorFlag = false;
+          }
+        }
+
+        if (colorFlag == true) {
+          for (let b = minTdIndex + 1; b < maxTdIndex; b++) {
+            // change color(white to Black)
+            fieldArray[trIndex][b] = 1;
+            selectedTds[b].children[0].classList.remove(ballColorWhite);
+            selectedTds[b].children[0].classList.add(ballColorBlack);
+          }
+        }
+      }
+
+      // Vertical （縦）
+
+      // Creating VerticalArray
+      let VerticalArray = [];
+      trs.forEach((tr) => {
+        VerticalArray.push(tr.children[tdIndex]);
+      });
+
+      let minVerticalTdIndex = null;
+      let maxVerticalTdIndex = null;
+      for (let i = 0; i < fieldArray.length; i++) {
+        if (
+          minVerticalTdIndex != null &&
+          fieldArray[i][tdIndex] == 1 &&
+          fieldArray[i - 1][tdIndex] == 0
+        ) {
+          maxVerticalTdIndex = i;
+        }
+
+        // when  i == 4 , can't  do [i + 1]
+        if (fieldArray.length == i + 1) {
+          break;
+        }
+
+        if (
+          fieldArray[i][tdIndex] == 1 &&
+          fieldArray[i + 1][tdIndex] == 0 &&
+          minVerticalTdIndex == null
+        ) {
+          minVerticalTdIndex = i;
+        }
+      }
+
+      if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
+        let verticalColorFlag = true;
+        for (let c = minVerticalTdIndex + 1; c < maxVerticalTdIndex; c++) {
+          if (fieldArray[c][tdIndex] == 2) {
+            verticalColorFlag = false;
+          }
+        }
+
+        if (verticalColorFlag == true) {
+          for (let b = minVerticalTdIndex + 1; b < maxVerticalTdIndex; b++) {
+            fieldArray[b][tdIndex] = 1;
+            VerticalArray[b].children[0].classList.remove(ballColorWhite);
+            VerticalArray[b].children[0].classList.add(ballColorBlack);
+          }
+        }
+      }
+
+      // slant (斜め)
+      let slantArray = [];
+      let midArray = []
+      let MidNum = 0;
+      if (fieldArray.length % 2 == 1) {
+        MidNum = Math.round(fieldArray.length / 2);
+      } else {
+        MidNum = fieldArray.length / 2;
+      }
+
+      let num = trIndex;
+      if (tdIndex + 1 < MidNum) {
+        if (trIndex + 1 < MidNum) {
+          for (let i = tdIndex; i <=fieldArray.length - trIndex; i++) {
+            slantArray.push(trs[num].children[i]);
+            num = num + 1;
+          }
+        } else if (trIndex + 1 == MidNum) {           
+          for (let i = tdIndex; i < tdIndex+3; i++) {
+            slantArray.push(trs[num].children[i]);
+            num = num + 1;
+          }
+
+          num = trIndex;
+
+        //   for (let i = tdIndex; i < fieldArray.length - tdIndex; i++) {
+        //     midArray.push(trs[num].children[i]);
+        //     num = num - 1;
+        //   }
+          
+        } else {
+          for (let i = 0; i <= trIndex; i++) {
+            slantArray.push(trs[num].children[i]);
+            num = num - 1;
+          }
+        }
+        console.log(slantArray);
+        console.log(midArray)
+      } else if (tdIndex + 1 == MidNum) {
+      } else if (tdIndex + 1 > MidNum) {
+        count = count - tdIndex;
+      }
+    } else {
+      // white
+
+      // Side (横)
+      fieldArray[trIndex][tdIndex] = 0;
+      let minTdIndex = null;
+      let maxTdIndex = null;
+
+      for (let i = 0; i < fieldArray[trIndex].length; i++) {
+        if (fieldArray[trIndex][i] == 0 && fieldArray[trIndex][i + 1] == 1) {
+          minTdIndex = i;
+          break;
+        }
+      }
+      for (let v = minTdIndex + 1; v < fieldArray[trIndex].length; v++) {
+        if (fieldArray[trIndex][v] == 0 && fieldArray[trIndex][v - 1] == 1) {
+          maxTdIndex = v;
+        }
+      }
+
+      if (minTdIndex != null && maxTdIndex != null) {
+        for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
+          if (fieldArray[trIndex][c] == 2) {
+            return;
+          }
+        }
+
+        for (let b = minTdIndex + 1; b < maxTdIndex; b++) {
+          if (selectedTds[b].children[0] == null) {
+            continue;
+          }
+          fieldArray[trIndex][b] = 0;
+          selectedTds[b].children[0].classList.remove(ballColorBlack);
+          selectedTds[b].children[0].classList.add(ballColorWhite);
+        }
+      }
+    }
+
+    // Vertical （縦）
+
+    let VerticalArray = [];
+    trs.forEach((tr) => {
+      VerticalArray.push(tr.children[tdIndex]);
+    });
+
+    let minVerticalTdIndex = null;
+    let maxVerticalTdIndex = null;
+    for (let i = 0; i < fieldArray.length; i++) {
+      // when  i == 4 , can't  do [i + 1]
+      if (fieldArray.length == i + 1) {
+        return;
+      }
+
+      if (fieldArray[i][tdIndex] == 0 && fieldArray[i + 1][tdIndex] == 1) {
+        minVerticalTdIndex = i;
+        break;
+      }
+    }
+
+    for (let v = minVerticalTdIndex + 1; v < fieldArray.length; v++) {
+      if (fieldArray[v][tdIndex] == 0 && fieldArray[v - 1][tdIndex] == 1) {
+        maxVerticalTdIndex = v;
+      }
+    }
+
+    if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
+      for (let c = minVerticalTdIndex + 1; c < maxVerticalTdIndex; c++) {
+        if (fieldArray[c][tdIndex] == 2) {
+          return;
+        }
+      }
+
+      for (let b = minVerticalTdIndex + 1; b < maxVerticalTdIndex; b++) {
+        if (VerticalArray[b].children[0] == null) {
+          continue;
+        }
+        fieldArray[b][tdIndex] = 0;
+        VerticalArray[b].children[0].classList.remove(ballColorBlack);
+        VerticalArray[b].children[0].classList.add(ballColorWhite);
+      }
+    }
+  }
+
+  //   Taking every td and saving into tds
+  let tds = document.getElementsByTagName("td");
+  for (let i = 0; i < tds.length; i++) {
+    tds[i].addEventListener("click", newBall);
+  }
+
+  //   Skip button to change class(falg)
+  let btn = document.getElementsByTagName("button")[0];
+  btn.addEventListener("click", () => {
+    if (flag == true) {
+      flag = false;
+    } else {
+      flag = true;
+    }
+  });
+</script>

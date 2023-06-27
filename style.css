@@ -1,0 +1,48 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 3vh;
+}
+
+table{
+    border-collapse: collapse;
+    background-color: rgb(128,216,154);
+}
+
+tr{
+    display: flex;
+}
+
+td{
+    width: 60px;
+    height: 60px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballWhite{
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    background-color: whitesmoke;
+    border-radius: 25vh;
+    text-align: center;
+}
+
+.ballBlack{
+    width: 30px;
+    height: 30px;
+    border: 1px solid white;
+    background-color: black;
+    border-radius: 25vh;
+    text-align: center;
+}
