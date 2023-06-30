@@ -201,32 +201,46 @@
         MidNum = fieldArray.length / 2;
       }
 
-      let count = null;
-      if ((trIndex == 0 && tdIndex == 0) || (trIndex == 4 && tdIndex == 4)) {
-        
-      } else if (
-        (trIndex == 0 && tdIndex == 4) ||
-        (trIndex == 4 && tdIndex == 0)
-      ) {
-        count = 5;
-      } else if (
-        (trIndex < MidNum - 1 && tdIndex < MidNum - 1) ||
-        (MidNum - 1 < trIndex && MidNum - 1 < tdIndex)
-      ) {
-        if(trIndex == tdIndex){
-            
-        }
-      } else if (
-        (trIndex < MidNum - 1 && MidNum - 1 < tdIndex) ||
-        (MidNum - 1 < trIndex && tdIndex < MidNum - 1)
-      ) {
-        count = 4;
-      } else {
-        count = 3;
-      }
-      console.log(count);
+      let count = 4
 
-      count = count - tdIndex;
+      if (trIndex<MidNum-1 && tdIndex<MidNum-1) {
+        if(tdIndex==0 && trIndex==0){
+            count=5
+        }
+        for(let i = tdIndex; i<count+tdIndex; i++){
+            slantArray.push(trs[trIndex].children[i])
+            trIndex = trIndex+1
+        }
+      }else if(trIndex<MidNum-1 && MidNum-1<tdIndex){
+        if(tdIndex==4 && trIndex==0){
+            count=5
+        }
+        for(let i = tdIndex; tdIndex-count<i; i--){
+            slantArray.push(trs[trIndex].children[i])
+            trIndex = trIndex+1
+        }
+      }else if(MidNum-1<trIndex && tdIndex<MidNum-1){
+        if(tdIndex==0 && trIndex==4){
+            count=5
+        }
+        for(let i = tdIndex; i<count+tdIndex; i++){
+            slantArray.push(trs[trIndex].children[i])
+            trIndex = trIndex-1
+        }
+      }else if(MidNum-1<trIndex && MidNum-1<tdIndex){
+        if(tdIndex==4 && trIndex==4){
+            count=5
+        }
+        for(let i = tdIndex; tdIndex-count<i; i--){
+            slantArray.push(trs[trIndex].children[i])
+            trIndex = trIndex-1
+        }
+      }
+    //   3の配列取り方
+      console.log(count);
+      console.log(slantArray)
+
+
     } else {
       // white
 
