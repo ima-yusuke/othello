@@ -201,46 +201,101 @@
         MidNum = fieldArray.length / 2;
       }
 
-      let count = 4
+      let count = 4;
 
-      if (trIndex<MidNum-1 && tdIndex<MidNum-1) {
-        if(tdIndex==0 && trIndex==0){
-            count=5
+      if (trIndex < MidNum - 1 && tdIndex < MidNum - 1) {
+        if (tdIndex == 0 && trIndex == 0) {
+          count = 5;
         }
-        for(let i = tdIndex; i<count+tdIndex; i++){
-            slantArray.push(trs[trIndex].children[i])
-            trIndex = trIndex+1
+        for (let i = tdIndex; i < count + tdIndex; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex + 1;
         }
-      }else if(trIndex<MidNum-1 && MidNum-1<tdIndex){
-        if(tdIndex==4 && trIndex==0){
-            count=5
+      } else if (trIndex < MidNum - 1 && MidNum - 1 < tdIndex) {
+        if (tdIndex == 4 && trIndex == 0) {
+          count = 5;
         }
-        for(let i = tdIndex; tdIndex-count<i; i--){
-            slantArray.push(trs[trIndex].children[i])
-            trIndex = trIndex+1
+        for (let i = tdIndex; tdIndex - count < i; i--) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex + 1;
         }
-      }else if(MidNum-1<trIndex && tdIndex<MidNum-1){
-        if(tdIndex==0 && trIndex==4){
-            count=5
+      } else if (MidNum - 1 < trIndex && tdIndex < MidNum - 1) {
+        if (tdIndex == 0 && trIndex == 4) {
+          count = 5;
         }
-        for(let i = tdIndex; i<count+tdIndex; i++){
-            slantArray.push(trs[trIndex].children[i])
-            trIndex = trIndex-1
+        for (let i = tdIndex; i < count + tdIndex; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex - 1;
         }
-      }else if(MidNum-1<trIndex && MidNum-1<tdIndex){
-        if(tdIndex==4 && trIndex==4){
-            count=5
+      } else if (MidNum - 1 < trIndex && MidNum - 1 < tdIndex) {
+        if (tdIndex == 4 && trIndex == 4) {
+          count = 5;
         }
-        for(let i = tdIndex; tdIndex-count<i; i--){
-            slantArray.push(trs[trIndex].children[i])
-            trIndex = trIndex-1
+        for (let i = tdIndex; tdIndex - count < i; i--) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex - 1;
         }
       }
-    //   3の配列取り方
-      console.log(count);
-      console.log(slantArray)
 
+      // To save trIndex
+      let tmpTrindex = trIndex;
 
+      if (trIndex < MidNum - 1 && tdIndex == MidNum - 1) {
+        for (let i = tdIndex; i < fieldArray.length; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex + 1;
+        }
+
+        for (let i = tdIndex; 0 <= i; i--) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+      } else if (trIndex == MidNum - 1 && tdIndex < MidNum - 1) {
+        for (let i = tdIndex; 0 <= trIndex; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex - 1;
+        }
+
+        for (let i = tdIndex; tmpTrindex <= 4; i++) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+      } else if (MidNum - 1 < trIndex && tdIndex == MidNum - 1) {
+        for (let i = tdIndex; i < fieldArray.length; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex - 1;
+        }
+
+        for (let i = tdIndex; 0 <= i; i--) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+      } else if (trIndex == MidNum - 1 && MidNum - 1 < tdIndex) {
+        for (let i = tdIndex; trIndex <= 4; i--) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex + 1;
+        }
+
+        for (let i = tdIndex; 0 <= tmpTrindex; i--) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+      } else if (trIndex == MidNum - 1 && tdIndex == MidNum - 1) {
+        trIndex = 0
+        for (let i = 0; i <= 4; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+          trIndex = trIndex + 1;
+        }
+
+        tmpTrindex = 4
+        for (let i = 0; i <= 4; i++) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+      }
+
+      console.log(slantArray);
+      console.log(midArray);
     } else {
       // white
 
