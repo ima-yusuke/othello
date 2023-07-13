@@ -250,6 +250,8 @@
         if (tdIndex == 4 && trIndex == 0) {
           count = 5;
         }
+        console.log(tdIndex)
+        // 1(tdindex)引く4(count)はできない
         for (let i = tdIndex; tdIndex - count < i; i--) {
           slantArray.push(trs[trIndex].children[i]);
 
@@ -267,14 +269,15 @@
           if (i == 0) {
             break;
           }
-          if (
+          
+          if(
             fieldArray[trIndex][i] == 1 &&
             fieldArray[trIndex + 1][i - 1] == 0 &&
             minSlantTrIndex == null
           ) {
             minSlantTrIndex = trIndex;
             testTd = i;
-            tdIndex = i;
+            // tdIndex = i;
           }
 
           trIndex = trIndex + 1;
@@ -286,11 +289,13 @@
         if (tdIndex == 0 && trIndex == 4) {
           count = 5;
         }
+        console.log(tdIndex)
+
         for (let i = tdIndex; i < count + tdIndex; i++) {
           slantArray.push(trs[trIndex].children[i]);
 
           //   Finding minSlantTrIndex
-          if (trIndex != 4 || i != 0) {
+          if (trIndex != 4 && i != 0) {
             if (
               fieldArray[trIndex][i] == 1 &&
               fieldArray[trIndex + 1][i - 1] == 0 &&
@@ -298,7 +303,7 @@
             ) {
               minSlantTrIndex = trIndex;
               testTd = i;
-              tdIndex = i;
+            //   tdIndex = i;
             }
           }
 
@@ -333,7 +338,7 @@
               maxSlantTrIndex != null
             ) {
               minSlantTrIndex = trIndex;
-              tdIndex = i;
+            //   tdIndex = i;
               testTd = i;
             }
           }
@@ -354,48 +359,118 @@
       }
 
       //   3
-      //   ※上記で trIndex = trIndex - 1にてtrindex変更しているので
-      //   trindexを別の変数に保存する必要あり
+
+     // 上
+     console.log(testTd)
+     console.log(tdIndex)
       if (tmpTrindex < MidNum - 1 && tdIndex == MidNum - 1) {
         for (let i = tdIndex; i < fieldArray.length; i++) {
           slantArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex + 1;
         }
 
+        tmpTrindex = trIndex;
+
         for (let i = tdIndex; 0 <= i; i--) {
           midArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex + 1;
         }
+
+        // Change the color
+        if(fieldArray[trIndex+1][tdIndex+1]==0 && fieldArray[trIndex+2][tdIndex+2]==1){
+            fieldArray[trIndex+1][tdIndex+1]=1
+            slantArray[1].children[0].classList.remove(ballColorWhite);
+            slantArray[1].children[0].classList.add(ballColorBlack);
+        }
+
+        if(fieldArray[trIndex+1][tdIndex-1]==0 && fieldArray[trIndex+2][tdIndex-2]==1){
+            fieldArray[trIndex+1][tdIndex-1]=1
+            midArray[1].children[0].classList.remove(ballColorWhite);
+            midArray[1].children[0].classList.add(ballColorBlack);
+        }
+    // 左
       } else if (tmpTrindex == MidNum - 1 && tdIndex < MidNum - 1) {
         for (let i = tdIndex; 0 <= tmpTrindex; i++) {
           slantArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex - 1;
         }
 
+        tmpTrindex = trIndex;
+
         for (let i = tdIndex; tmpTrindex <= 4; i++) {
           midArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex + 1;
         }
+
+         // Change the color
+         if(fieldArray[trIndex-1][tdIndex+1]==0 && fieldArray[trIndex-2][tdIndex+2]==1){
+            fieldArray[trIndex-1][tdIndex+1]=1
+            slantArray[1].children[0].classList.remove(ballColorWhite);
+            slantArray[1].children[0].classList.add(ballColorBlack);
+        }
+
+        if(fieldArray[trIndex+1][tdIndex+1]==0 && fieldArray[trIndex+2][tdIndex+2]==1){
+            fieldArray[trIndex+1][tdIndex+1]=1
+            midArray[1].children[0].classList.remove(ballColorWhite);
+            midArray[1].children[0].classList.add(ballColorBlack);
+        }
+    // 下
       } else if (MidNum - 1 < tmpTrindex && tdIndex == MidNum - 1) {
         for (let i = tdIndex; i < fieldArray.length; i++) {
           slantArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex - 1;
         }
 
+        tmpTrindex = trIndex;
+
         for (let i = tdIndex; 0 <= i; i--) {
           midArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex - 1;
         }
+
+        // Change the color
+        if(fieldArray[trIndex-1][tdIndex+1]==0 && fieldArray[trIndex-2][tdIndex+2]==1){
+            fieldArray[trIndex-1][tdIndex+1]=1
+            slantArray[1].children[0].classList.remove(ballColorWhite);
+            slantArray[1].children[0].classList.add(ballColorBlack);
+        }
+
+        if(fieldArray[trIndex-1][tdIndex-1]==0 && fieldArray[trIndex-2][tdIndex-2]==1){
+            fieldArray[trIndex-1][tdIndex-1]=1
+            midArray[1].children[0].classList.remove(ballColorWhite);
+            midArray[1].children[0].classList.add(ballColorBlack);
+        }
+    // 右
       } else if (tmpTrindex == MidNum - 1 && MidNum - 1 < tdIndex) {
         for (let i = tdIndex; tmpTrindex <= 4; i--) {
           slantArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex + 1;
         }
 
+        tmpTrindex = trIndex;
+
         for (let i = tdIndex; 0 <= tmpTrindex; i--) {
           midArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex - 1;
         }
+
+        console.log(slantArray)
+      console.log(midArray)
+
+         // Change the color
+         if(fieldArray[trIndex+1][tdIndex-1]==0 && fieldArray[trIndex+2][tdIndex-2]==1){
+            fieldArray[trIndex+1][tdIndex-1]=1
+            slantArray[1].children[0].classList.remove(ballColorWhite);
+            slantArray[1].children[0].classList.add(ballColorBlack);
+        }
+
+
+        if(fieldArray[trIndex-1][tdIndex-1]==0 && fieldArray[trIndex-2][tdIndex-2]==1){
+            fieldArray[trIndex-1][tdIndex-1]=1
+            midArray[1].children[0].classList.remove(ballColorWhite);
+            midArray[1].children[0].classList.add(ballColorBlack);
+        }
+    // 真ん中
       } else if (tmpTrindex == MidNum - 1 && tdIndex == MidNum - 1) {
         tmpTrindex = 0;
         for (let i = 0; i <= 4; i++) {
@@ -408,7 +483,19 @@
           midArray.push(trs[tmpTrindex].children[i]);
           tmpTrindex = tmpTrindex - 1;
         }
+
+        if(fieldArray[trIndex+1][tdIndex+1]==0 && fieldArray[trIndex+2][tdIndex+2]==1){
+            fieldArray[trIndex+1][tdIndex+1]=1
+            slantArray[3].children[0].classList.remove(ballColorWhite);
+            slantArray[3].children[0].classList.add(ballColorBlack);
+        }
+        if(fieldArray[trIndex-1][tdIndex-1]==0 && fieldArray[trIndex-2][tdIndex-2]==1){
+            fieldArray[trIndex-1][tdIndex-1]=1
+            slantArray[1].children[0].classList.remove(ballColorWhite);
+            slantArray[1].children[0].classList.add(ballColorBlack);
+        }
       }
+     
 
       if (minSlantTrIndex != null && maxSlantTrIndex != null) {
         let slantColorFlag = true;
