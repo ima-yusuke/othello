@@ -209,7 +209,7 @@
       let minSlantTrIndex = null;
       let maxSlantTrIndex = null;
       let testTd = tdIndex;
-      let flag = true;
+      let flag = "";
 
       //  左上
       if (trIndex < MidNum - 1 && tdIndex < MidNum - 1) {
@@ -244,13 +244,13 @@
 
           trIndex = trIndex + 1;
         }
-
+        flag = "leftUp"
         // 右上
       } else if (trIndex < MidNum - 1 && MidNum - 1 < tdIndex) {
         if (tdIndex == 4 && trIndex == 0) {
           count = 5;
         }
-        console.log(tdIndex)
+       
         // 1(tdindex)引く4(count)はできない
         for (let i = tdIndex; tdIndex - count < i; i--) {
           slantArray.push(trs[trIndex].children[i]);
@@ -266,9 +266,10 @@
           }
 
           //   Finding minSlantTrIndex
-          if (i == 0) {
+          if (trIndex == 4 ) {
             break;
           }
+         
           
           if(
             fieldArray[trIndex][i] == 1 &&
@@ -282,8 +283,7 @@
 
           trIndex = trIndex + 1;
         }
-        flag = false;
-
+        flag = "rightUp"
         // 左下
       } else if (MidNum - 1 < trIndex && tdIndex < MidNum - 1) {
         if (tdIndex == 0 && trIndex == 4) {
@@ -320,8 +320,7 @@
           }
           trIndex = trIndex - 1;
         }
-        flag = false;
-
+        flag = "leftDown"
         // 右下
       } else if (MidNum - 1 < trIndex && MidNum - 1 < tdIndex) {
         if (tdIndex == 4 && trIndex == 4) {
@@ -356,6 +355,8 @@
 
           trIndex = trIndex - 1;
         }
+        flag = "rightDown"
+
       }
 
       //   3
@@ -496,19 +497,38 @@
         }
       }
      
-
+      console.log(minSlantTrIndex)
+      console.log(maxSlantTrIndex)
+      console.log(flag)
       if (minSlantTrIndex != null && maxSlantTrIndex != null) {
         let slantColorFlag = true;
-        if (flag == true) {
+        if (flag == "rightUp") {
           for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
+            if (fieldArray[c][tdIndex - 1] == 2) {
+              slantColorFlag = false;
+              console.log("falseeee");
+            }
+            tdIndex = tdIndex - 1;
+          }
+        } else if(flag == "leftDown") {
+            console.log(tdIndex+ "tdindex")
+          for (let c = maxSlantTrIndex - 1; minSlantTrIndex<c; c--) {
+            if (fieldArray[c][tdIndex + 1] == 2) {
+              slantColorFlag = false;
+              console.log("falseeeetwooooo");
+            }
+            tdIndex = tdIndex + 1;
+          }
+        } else if(flag == "leftUp"){
+            for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
             if (fieldArray[c][tdIndex + 1] == 2) {
               slantColorFlag = false;
               console.log("falseeee");
             }
             tdIndex = tdIndex + 1;
           }
-        } else {
-          for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
+        } else if(flag == "rightDown"){
+            for (let c = maxSlantTrIndex -1; minSlantTrIndex<c; c--) {
             if (fieldArray[c][tdIndex - 1] == 2) {
               slantColorFlag = false;
               console.log("falseeee");
@@ -517,18 +537,8 @@
           }
         }
 
-        if (slantColorFlag == true && flag == true) {
-          for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i++) {
-            fieldArray[minSlantTrIndex + 1][i + 1] = 1;
-            trs[minSlantTrIndex + 1].children[
-              i + 1
-            ].children[0].classList.remove(ballColorWhite);
-            trs[minSlantTrIndex + 1].children[i + 1].children[0].classList.add(
-              ballColorBlack
-            );
-            minSlantTrIndex = minSlantTrIndex + 1;
-          }
-        } else if (slantColorFlag == true && flag == false) {
+        console.log(testTd + "testTd") 
+        if (slantColorFlag == true && (flag=="rightUp" || flag=="leftDown")) {
           for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i--) {
             fieldArray[minSlantTrIndex + 1][i - 1] = 1;
             trs[minSlantTrIndex + 1].children[
@@ -539,7 +549,18 @@
             );
             minSlantTrIndex = minSlantTrIndex + 1;
           }
-        }
+        }else if(slantColorFlag == true && (flag=="leftUp" || flag=="rightDown")){
+            for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i++) {
+            fieldArray[minSlantTrIndex + 1][i + 1] = 1;
+            trs[minSlantTrIndex + 1].children[
+              i + 1
+            ].children[0].classList.remove(ballColorWhite);
+            trs[minSlantTrIndex + 1].children[i + 1].children[0].classList.add(
+              ballColorBlack
+            );
+            minSlantTrIndex = minSlantTrIndex + 1;
+          }
+        } 
       }
 
       console.log(fieldArray);
