@@ -54,6 +54,9 @@
   </body>
 </html>
 <script>
+    // start code 1200
+
+
   // white = 0, balck = 1
   let fieldArray = [
     [2, 2, 2, 2, 2],
@@ -105,41 +108,24 @@
       let maxTdIndex = null;
 
       // Finding minTdIndex and maxTdIndex
-      for (let i = 0; i < fieldArray[trIndex].length; i++) {
-        if (
-          minTdIndex != null &&
-          fieldArray[trIndex][i] == 1 &&
-          fieldArray[trIndex][i - 1] == 0
-        ) {
-          maxTdIndex = i;
-        }
-        if (
-          fieldArray[trIndex][i] == 1 &&
-          fieldArray[trIndex][i + 1] == 0 &&
-          minTdIndex == null
-        ) {
-          minTdIndex = i;
-        }
-      }
+      minTdIndex = findMinTdIndex(1, 0, trIndex, minTdIndex);
+      maxTdIndex = findMaxTdIndex(
+        1,
+        0,
+        trIndex,
+        maxTdIndex,
+        findMinTdIndex(1, 0, trIndex, minTdIndex)
+      );
 
-      if (minTdIndex != null && maxTdIndex != null) {
-        let colorFlag = true;
-        for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
-          // To stop next code
-          if (fieldArray[trIndex][c] == 2) {
-            colorFlag = false;
-          }
-        }
-
-        if (colorFlag == true) {
-          for (let b = minTdIndex + 1; b < maxTdIndex; b++) {
-            // change color(white to Black)
-            fieldArray[trIndex][b] = 1;
-            selectedTds[b].children[0].classList.remove(ballColorWhite);
-            selectedTds[b].children[0].classList.add(ballColorBlack);
-          }
-        }
-      }
+      changeSideArrayColor(
+        minTdIndex,
+        maxTdIndex,
+        trIndex,
+        1,
+        selectedTds,
+        ballColorWhite,
+        ballColorBlack
+      );
 
       // Vertical （縦）
 
@@ -619,80 +605,35 @@
       let minTdIndex = null;
       let maxTdIndex = null;
 
-      for (let i = 0; i < fieldArray[trIndex].length; i++) {
-        if (
-          minTdIndex != null &&
-          fieldArray[trIndex][i] == 0 &&
-          fieldArray[trIndex][i - 1] == 1
-        ) {
-          maxTdIndex = i;
-        }
-        if (
-          fieldArray[trIndex][i] == 0 &&
-          fieldArray[trIndex][i + 1] == 1 &&
-          minTdIndex == null
-        ) {
-          minTdIndex = i;
-        }
-      }
+      minTdIndex = findMinTdIndex(0, 1, trIndex, minTdIndex);
+      maxTdIndex = findMaxTdIndex(
+        0,
+        1,
+        trIndex,
+        maxTdIndex,
+        findMinTdIndex(0, 1, trIndex, minTdIndex)
+      );
 
-      if (minTdIndex != null && maxTdIndex != null) {
-        let colorFlag = true;
-        for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
-          // To stop next code
-          if (fieldArray[trIndex][c] == 2) {
-            colorFlag = false;
-          }
-        }
+      changeSideArrayColor(
+        minTdIndex,
+        maxTdIndex,
+        trIndex,
+        0,
+        selectedTds,
+        ballColorBlack,
+        ballColorWhite
+      );
 
-        if (colorFlag == true) {
-          for (let b = minTdIndex + 1; b < maxTdIndex; b++) {
-            fieldArray[trIndex][b] = 0;
-            selectedTds[b].children[0].classList.remove(ballColorBlack);
-            selectedTds[b].children[0].classList.add(ballColorWhite);
-          }
-        }
-      }
-    //   for (let i = 0; i < fieldArray[trIndex].length; i++) {
-    //     if (fieldArray[trIndex][i] == 0 && fieldArray[trIndex][i + 1] == 1) {
-    //       minTdIndex = i;
-    //       break;
-    //     }
-    //   }
-    //   for (let v = minTdIndex + 1; v < fieldArray[trIndex].length; v++) {
-    //     if (fieldArray[trIndex][v] == 0 && fieldArray[trIndex][v - 1] == 1) {
-    //       maxTdIndex = v;
-    //     }
-    //   }
+      // Vertical （縦）
 
-    //   if (minTdIndex != null && maxTdIndex != null) {
-    //     for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
-    //       if (fieldArray[trIndex][c] == 2) {
-    //         return;
-    //       }
-    //     }
+      let VerticalArray = [];
+      trs.forEach((tr) => {
+        VerticalArray.push(tr.children[tdIndex]);
+      });
 
-    //     for (let b = minTdIndex + 1; b < maxTdIndex; b++) {
-    //       if (selectedTds[b].children[0] == null) {
-    //         continue;
-    //       }
-    //       fieldArray[trIndex][b] = 0;
-    //       selectedTds[b].children[0].classList.remove(ballColorBlack);
-    //       selectedTds[b].children[0].classList.add(ballColorWhite);
-    //     }
-    //   }
-    
-
-    // Vertical （縦）
-
-    let VerticalArray = [];
-    trs.forEach((tr) => {
-      VerticalArray.push(tr.children[tdIndex]);
-    });
-
-    let minVerticalTdIndex = null;
-    let maxVerticalTdIndex = null;
-    for (let i = 0; i < fieldArray.length; i++) {
+      let minVerticalTdIndex = null;
+      let maxVerticalTdIndex = null;
+      for (let i = 0; i < fieldArray.length; i++) {
         if (
           minVerticalTdIndex != null &&
           fieldArray[i][tdIndex] == 0 &&
@@ -732,456 +673,424 @@
         }
       }
 
-    // for (let i = 0; i < fieldArray.length; i++) {
-    //   // when  i == 4 , can't  do [i + 1]
-    //   if (fieldArray.length == i + 1) {
-    //     return;
-    //   }
+      // 斜め
 
-    //   if (fieldArray[i][tdIndex] == 0 && fieldArray[i + 1][tdIndex] == 1) {
-    //     minVerticalTdIndex = i;
-    //     break;
-    //   }
-    // }
-
-    // for (let v = minVerticalTdIndex + 1; v < fieldArray.length; v++) {
-    //   if (fieldArray[v][tdIndex] == 0 && fieldArray[v - 1][tdIndex] == 1) {
-    //     maxVerticalTdIndex = v;
-    //   }
-    // }
-
-    // if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
-    //   for (let c = minVerticalTdIndex + 1; c < maxVerticalTdIndex; c++) {
-    //     if (fieldArray[c][tdIndex] == 2) {
-    //       return;
-    //     }
-    //   }
-
-    //   for (let b = minVerticalTdIndex + 1; b < maxVerticalTdIndex; b++) {
-    //     if (VerticalArray[b].children[0] == null) {
-    //       continue;
-    //     }
-    //     fieldArray[b][tdIndex] = 0;
-    //     VerticalArray[b].children[0].classList.remove(ballColorBlack);
-    //     VerticalArray[b].children[0].classList.add(ballColorWhite);
-    //   }
-    // }
-
-    // 斜め
-
-    let slantArray = [];
-    let midArray = [];
-    let MidNum = 0;
-    if (fieldArray.length % 2 == 1) {
-      MidNum = Math.round(fieldArray.length / 2);
-    } else {
-      MidNum = fieldArray.length / 2;
-    }
-
-    let count = 4;
-
-    // To save trIndex
-    let tmpTrindex = trIndex;
-
-    let minSlantTrIndex = null;
-    let maxSlantTrIndex = null;
-    let testTd = tdIndex;
-    let flag = "";
-    //  左上
-    if (trIndex < MidNum - 1 && tdIndex < MidNum - 1) {
-      if (tdIndex == 0 && trIndex == 0) {
-        count = 5;
+      let slantArray = [];
+      let midArray = [];
+      let MidNum = 0;
+      if (fieldArray.length % 2 == 1) {
+        MidNum = Math.round(fieldArray.length / 2);
+      } else {
+        MidNum = fieldArray.length / 2;
       }
-      for (let i = tdIndex; i < count + tdIndex; i++) {
-        slantArray.push(trs[trIndex].children[i]);
 
-        //   Finding maxSlantTrIndex
-        if (minSlantTrIndex != null) {
-          if (
-            fieldArray[trIndex][i] == 0 &&
-            fieldArray[trIndex - 1][i - 1] == 1
-          ) {
-            maxSlantTrIndex = trIndex;
+      let count = 4;
+
+      // To save trIndex
+      let tmpTrindex = trIndex;
+
+      let minSlantTrIndex = null;
+      let maxSlantTrIndex = null;
+      let testTd = tdIndex;
+      let flag = "";
+      //  左上
+      if (trIndex < MidNum - 1 && tdIndex < MidNum - 1) {
+        if (tdIndex == 0 && trIndex == 0) {
+          count = 5;
+        }
+        for (let i = tdIndex; i < count + tdIndex; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+
+          //   Finding maxSlantTrIndex
+          if (minSlantTrIndex != null) {
+            if (
+              fieldArray[trIndex][i] == 0 &&
+              fieldArray[trIndex - 1][i - 1] == 1
+            ) {
+              maxSlantTrIndex = trIndex;
+            }
           }
-        }
 
-        //   Finding minSlantTrIndex
-        if (fieldArray.length == i + 1) {
-          break;
-        }
-        if (
-          fieldArray[trIndex][i] == 0 &&
-          fieldArray[trIndex + 1][i + 1] == 1 &&
-          minSlantTrIndex == null
-        ) {
-          minSlantTrIndex = trIndex;
-          testTd = i;
-        }
-
-        trIndex = trIndex + 1;
-      }
-      flag = "leftUp";
-      // 右上
-    } else if (trIndex < MidNum - 1 && MidNum - 1 < tdIndex) {
-      if (tdIndex == 4 && trIndex == 0) {
-        count = 5;
-      }
-
-      // 1(tdindex)引く4(count)はできない
-      for (let i = tdIndex; tdIndex - count < i; i--) {
-        slantArray.push(trs[trIndex].children[i]);
-
-        //   Finding maxSlantTrIndex
-        if (minSlantTrIndex != null) {
-          if (
-            fieldArray[trIndex][i] == 0 &&
-            fieldArray[trIndex - 1][i + 1] == 1
-          ) {
-            maxSlantTrIndex = trIndex;
+          //   Finding minSlantTrIndex
+          if (fieldArray.length == i + 1) {
+            break;
           }
-        }
-
-        //   Finding minSlantTrIndex
-        if (trIndex == 4) {
-          break;
-        }
-
-        if (
-          fieldArray[trIndex][i] == 0 &&
-          fieldArray[trIndex + 1][i - 1] == 1 &&
-          minSlantTrIndex == null
-        ) {
-          minSlantTrIndex = trIndex;
-          testTd = i;
-          // tdIndex = i;
-        }
-
-        trIndex = trIndex + 1;
-      }
-      flag = "rightUp";
-      // 左下
-    } else if (MidNum - 1 < trIndex && tdIndex < MidNum - 1) {
-      if (tdIndex == 0 && trIndex == 4) {
-        count = 5;
-      }
-      console.log(tdIndex);
-
-      for (let i = tdIndex; i < count + tdIndex; i++) {
-        slantArray.push(trs[trIndex].children[i]);
-
-        //   Finding minSlantTrIndex
-        if (trIndex != 4 && i != 0) {
-          if (
-            fieldArray[trIndex][i] == 0 &&
-            fieldArray[trIndex + 1][i - 1] == 1 &&
-            maxSlantTrIndex != null
-          ) {
-            minSlantTrIndex = trIndex;
-            testTd = i;
-            //   tdIndex = i;
-          }
-        }
-
-        //   Finding maxSlantTrIndex
-        if (trIndex == 0) {
-          break;
-        }
-        if (
-          fieldArray[trIndex][i] == 0 &&
-          fieldArray[trIndex - 1][i + 1] == 1 &&
-          maxSlantTrIndex == null
-        ) {
-          maxSlantTrIndex = trIndex;
-        }
-        trIndex = trIndex - 1;
-      }
-      flag = "leftDown";
-      // 右下
-    } else if (MidNum - 1 < trIndex && MidNum - 1 < tdIndex) {
-      if (tdIndex == 4 && trIndex == 4) {
-        count = 5;
-      }
-      for (let i = tdIndex; tdIndex - count < i; i--) {
-        slantArray.unshift(trs[trIndex].children[i]);
-
-        //   Finding minSlantTrIndex
-        if (i != 4 && trIndex != 4) {
           if (
             fieldArray[trIndex][i] == 0 &&
             fieldArray[trIndex + 1][i + 1] == 1 &&
-            maxSlantTrIndex != null
+            minSlantTrIndex == null
           ) {
             minSlantTrIndex = trIndex;
-            //   tdIndex = i;
             testTd = i;
           }
+
+          trIndex = trIndex + 1;
+        }
+        flag = "leftUp";
+        // 右上
+      } else if (trIndex < MidNum - 1 && MidNum - 1 < tdIndex) {
+        if (tdIndex == 4 && trIndex == 0) {
+          count = 5;
         }
 
-        if (trIndex == 0) {
-          break;
+        // 1(tdindex)引く4(count)はできない
+        for (let i = tdIndex; tdIndex - count < i; i--) {
+          slantArray.push(trs[trIndex].children[i]);
+
+          //   Finding maxSlantTrIndex
+          if (minSlantTrIndex != null) {
+            if (
+              fieldArray[trIndex][i] == 0 &&
+              fieldArray[trIndex - 1][i + 1] == 1
+            ) {
+              maxSlantTrIndex = trIndex;
+            }
+          }
+
+          //   Finding minSlantTrIndex
+          if (trIndex == 4) {
+            break;
+          }
+
+          if (
+            fieldArray[trIndex][i] == 0 &&
+            fieldArray[trIndex + 1][i - 1] == 1 &&
+            minSlantTrIndex == null
+          ) {
+            minSlantTrIndex = trIndex;
+            testTd = i;
+            // tdIndex = i;
+          }
+
+          trIndex = trIndex + 1;
+        }
+        flag = "rightUp";
+        // 左下
+      } else if (MidNum - 1 < trIndex && tdIndex < MidNum - 1) {
+        if (tdIndex == 0 && trIndex == 4) {
+          count = 5;
+        }
+        console.log(tdIndex);
+
+        for (let i = tdIndex; i < count + tdIndex; i++) {
+          slantArray.push(trs[trIndex].children[i]);
+
+          //   Finding minSlantTrIndex
+          if (trIndex != 4 && i != 0) {
+            if (
+              fieldArray[trIndex][i] == 0 &&
+              fieldArray[trIndex + 1][i - 1] == 1 &&
+              maxSlantTrIndex != null
+            ) {
+              minSlantTrIndex = trIndex;
+              testTd = i;
+              //   tdIndex = i;
+            }
+          }
+
+          //   Finding maxSlantTrIndex
+          if (trIndex == 0) {
+            break;
+          }
+          if (
+            fieldArray[trIndex][i] == 0 &&
+            fieldArray[trIndex - 1][i + 1] == 1 &&
+            maxSlantTrIndex == null
+          ) {
+            maxSlantTrIndex = trIndex;
+          }
+          trIndex = trIndex - 1;
+        }
+        flag = "leftDown";
+        // 右下
+      } else if (MidNum - 1 < trIndex && MidNum - 1 < tdIndex) {
+        if (tdIndex == 4 && trIndex == 4) {
+          count = 5;
+        }
+        for (let i = tdIndex; tdIndex - count < i; i--) {
+          slantArray.unshift(trs[trIndex].children[i]);
+
+          //   Finding minSlantTrIndex
+          if (i != 4 && trIndex != 4) {
+            if (
+              fieldArray[trIndex][i] == 0 &&
+              fieldArray[trIndex + 1][i + 1] == 1 &&
+              maxSlantTrIndex != null
+            ) {
+              minSlantTrIndex = trIndex;
+              //   tdIndex = i;
+              testTd = i;
+            }
+          }
+
+          if (trIndex == 0) {
+            break;
+          }
+          if (
+            fieldArray[trIndex][i] == 0 &&
+            fieldArray[trIndex - 1][i - 1] == 1 &&
+            maxSlantTrIndex == null
+          ) {
+            maxSlantTrIndex = trIndex;
+          }
+
+          trIndex = trIndex - 1;
+        }
+        flag = "rightDown";
+      }
+
+      //   3
+
+      // 上
+      console.log(testTd);
+      console.log(tdIndex);
+      if (tmpTrindex < MidNum - 1 && tdIndex == MidNum - 1) {
+        for (let i = tdIndex; i < fieldArray.length; i++) {
+          slantArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+
+        tmpTrindex = trIndex;
+
+        for (let i = tdIndex; 0 <= i; i--) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+
+        // Change the color
+        if (
+          fieldArray[trIndex + 1][tdIndex + 1] == 1 &&
+          fieldArray[trIndex + 2][tdIndex + 2] == 0
+        ) {
+          fieldArray[trIndex + 1][tdIndex + 1] = 0;
+          slantArray[1].children[0].classList.remove(ballColorBlack);
+          slantArray[1].children[0].classList.add(ballColorWhite);
+        }
+
+        if (
+          fieldArray[trIndex + 1][tdIndex - 1] == 1 &&
+          fieldArray[trIndex + 2][tdIndex - 2] == 0
+        ) {
+          fieldArray[trIndex + 1][tdIndex - 1] = 0;
+          midArray[1].children[0].classList.remove(ballColorBlack);
+          midArray[1].children[0].classList.add(ballColorWhite);
+        }
+        // 左
+      } else if (tmpTrindex == MidNum - 1 && tdIndex < MidNum - 1) {
+        for (let i = tdIndex; 0 <= tmpTrindex; i++) {
+          slantArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+
+        tmpTrindex = trIndex;
+
+        for (let i = tdIndex; tmpTrindex <= 4; i++) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+
+        // Change the color
+        if (
+          fieldArray[trIndex - 1][tdIndex + 1] == 1 &&
+          fieldArray[trIndex - 2][tdIndex + 2] == 0
+        ) {
+          fieldArray[trIndex - 1][tdIndex + 1] = 0;
+          slantArray[1].children[0].classList.remove(ballColorBlack);
+          slantArray[1].children[0].classList.add(ballColorWhite);
+        }
+
+        if (
+          fieldArray[trIndex + 1][tdIndex + 1] == 1 &&
+          fieldArray[trIndex + 2][tdIndex + 2] == 0
+        ) {
+          fieldArray[trIndex + 1][tdIndex + 1] = 0;
+          midArray[1].children[0].classList.remove(ballColorBlack);
+          midArray[1].children[0].classList.add(ballColorWhite);
+        }
+        // 下
+      } else if (MidNum - 1 < tmpTrindex && tdIndex == MidNum - 1) {
+        for (let i = tdIndex; i < fieldArray.length; i++) {
+          slantArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+
+        tmpTrindex = trIndex;
+
+        for (let i = tdIndex; 0 <= i; i--) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+
+        // Change the color
+        if (
+          fieldArray[trIndex - 1][tdIndex + 1] == 1 &&
+          fieldArray[trIndex - 2][tdIndex + 2] == 0
+        ) {
+          fieldArray[trIndex - 1][tdIndex + 1] = 0;
+          slantArray[1].children[0].classList.remove(ballColorBlack);
+          slantArray[1].children[0].classList.add(ballColorWhite);
+        }
+
+        if (
+          fieldArray[trIndex - 1][tdIndex - 1] == 1 &&
+          fieldArray[trIndex - 2][tdIndex - 2] == 0
+        ) {
+          fieldArray[trIndex - 1][tdIndex - 1] = 0;
+          midArray[1].children[0].classList.remove(ballColorBlack);
+          midArray[1].children[0].classList.add(ballColorWhite);
+        }
+        // 右
+      } else if (tmpTrindex == MidNum - 1 && MidNum - 1 < tdIndex) {
+        for (let i = tdIndex; tmpTrindex <= 4; i--) {
+          slantArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+
+        tmpTrindex = trIndex;
+
+        for (let i = tdIndex; 0 <= tmpTrindex; i--) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+
+        console.log(slantArray);
+        console.log(midArray);
+
+        // Change the color
+        if (
+          fieldArray[trIndex + 1][tdIndex - 1] == 1 &&
+          fieldArray[trIndex + 2][tdIndex - 2] == 0
+        ) {
+          fieldArray[trIndex + 1][tdIndex - 1] = 0;
+          slantArray[1].children[0].classList.remove(ballColorBlack);
+          slantArray[1].children[0].classList.add(ballColorWhite);
+        }
+
+        if (
+          fieldArray[trIndex - 1][tdIndex - 1] == 1 &&
+          fieldArray[trIndex - 2][tdIndex - 2] == 0
+        ) {
+          fieldArray[trIndex - 1][tdIndex - 1] = 0;
+          midArray[1].children[0].classList.remove(ballColorBlack);
+          midArray[1].children[0].classList.add(ballColorWhite);
+        }
+        // 真ん中
+      } else if (tmpTrindex == MidNum - 1 && tdIndex == MidNum - 1) {
+        tmpTrindex = 0;
+        for (let i = 0; i <= 4; i++) {
+          slantArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex + 1;
+        }
+
+        tmpTrindex = 4;
+        for (let i = 0; i <= 4; i++) {
+          midArray.push(trs[tmpTrindex].children[i]);
+          tmpTrindex = tmpTrindex - 1;
+        }
+
+        if (
+          fieldArray[trIndex + 1][tdIndex + 1] == 1 &&
+          fieldArray[trIndex + 2][tdIndex + 2] == 0
+        ) {
+          fieldArray[trIndex + 1][tdIndex + 1] = 0;
+          slantArray[3].children[0].classList.remove(ballColorBlack);
+          slantArray[3].children[0].classList.add(ballColorWhite);
         }
         if (
-          fieldArray[trIndex][i] == 0 &&
-          fieldArray[trIndex - 1][i - 1] == 1 &&
-          maxSlantTrIndex == null
+          fieldArray[trIndex - 1][tdIndex - 1] == 1 &&
+          fieldArray[trIndex - 2][tdIndex - 2] == 0
         ) {
-          maxSlantTrIndex = trIndex;
+          fieldArray[trIndex - 1][tdIndex - 1] = 0;
+          slantArray[1].children[0].classList.remove(ballColorBlack);
+          slantArray[1].children[0].classList.add(ballColorWhite);
         }
-
-        trIndex = trIndex - 1;
-      }
-      flag = "rightDown";
-    }
-
-    //   3
-
-    // 上
-    console.log(testTd);
-    console.log(tdIndex);
-    if (tmpTrindex < MidNum - 1 && tdIndex == MidNum - 1) {
-      for (let i = tdIndex; i < fieldArray.length; i++) {
-        slantArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex + 1;
-      }
-
-      tmpTrindex = trIndex;
-
-      for (let i = tdIndex; 0 <= i; i--) {
-        midArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex + 1;
+        if (
+          fieldArray[trIndex - 1][tdIndex + 1] == 1 &&
+          fieldArray[trIndex - 2][tdIndex + 2] == 0
+        ) {
+          fieldArray[trIndex - 1][tdIndex + 1] = 0;
+          midArray[3].children[0].classList.remove(ballColorBlack);
+          midArray[3].children[0].classList.add(ballColorWhite);
+        }
+        if (
+          fieldArray[trIndex + 1][tdIndex - 1] == 1 &&
+          fieldArray[trIndex + 2][tdIndex - 2] == 0
+        ) {
+          fieldArray[trIndex + 1][tdIndex - 1] = 0;
+          midArray[1].children[0].classList.remove(ballColorBlack);
+          midArray[1].children[0].classList.add(ballColorWhite);
+        }
       }
 
-      // Change the color
-      if (
-        fieldArray[trIndex + 1][tdIndex + 1] == 1 &&
-        fieldArray[trIndex + 2][tdIndex + 2] == 0
-      ) {
-        fieldArray[trIndex + 1][tdIndex + 1] = 0;
-        slantArray[1].children[0].classList.remove(ballColorBlack);
-        slantArray[1].children[0].classList.add(ballColorWhite);
-      }
-
-      if (
-        fieldArray[trIndex + 1][tdIndex - 1] == 1 &&
-        fieldArray[trIndex + 2][tdIndex - 2] == 0
-      ) {
-        fieldArray[trIndex + 1][tdIndex - 1] = 0;
-        midArray[1].children[0].classList.remove(ballColorBlack);
-        midArray[1].children[0].classList.add(ballColorWhite);
-      }
-      // 左
-    } else if (tmpTrindex == MidNum - 1 && tdIndex < MidNum - 1) {
-      for (let i = tdIndex; 0 <= tmpTrindex; i++) {
-        slantArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex - 1;
-      }
-
-      tmpTrindex = trIndex;
-
-      for (let i = tdIndex; tmpTrindex <= 4; i++) {
-        midArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex + 1;
-      }
-
-      // Change the color
-      if (
-        fieldArray[trIndex - 1][tdIndex + 1] == 1 &&
-        fieldArray[trIndex - 2][tdIndex + 2] == 0
-      ) {
-        fieldArray[trIndex - 1][tdIndex + 1] = 0;
-        slantArray[1].children[0].classList.remove(ballColorBlack);
-        slantArray[1].children[0].classList.add(ballColorWhite);
-      }
-
-      if (
-        fieldArray[trIndex + 1][tdIndex + 1] == 1 &&
-        fieldArray[trIndex + 2][tdIndex + 2] == 0
-      ) {
-        fieldArray[trIndex + 1][tdIndex + 1] = 0;
-        midArray[1].children[0].classList.remove(ballColorBlack);
-        midArray[1].children[0].classList.add(ballColorWhite);
-      }
-      // 下
-    } else if (MidNum - 1 < tmpTrindex && tdIndex == MidNum - 1) {
-      for (let i = tdIndex; i < fieldArray.length; i++) {
-        slantArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex - 1;
-      }
-
-      tmpTrindex = trIndex;
-
-      for (let i = tdIndex; 0 <= i; i--) {
-        midArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex - 1;
-      }
-
-      // Change the color
-      if (
-        fieldArray[trIndex - 1][tdIndex + 1] == 1 &&
-        fieldArray[trIndex - 2][tdIndex + 2] == 0
-      ) {
-        fieldArray[trIndex - 1][tdIndex + 1] = 0;
-        slantArray[1].children[0].classList.remove(ballColorBlack);
-        slantArray[1].children[0].classList.add(ballColorWhite);
-      }
-
-      if (
-        fieldArray[trIndex - 1][tdIndex - 1] == 1 &&
-        fieldArray[trIndex - 2][tdIndex - 2] == 0
-      ) {
-        fieldArray[trIndex - 1][tdIndex - 1] = 0;
-        midArray[1].children[0].classList.remove(ballColorBlack);
-        midArray[1].children[0].classList.add(ballColorWhite);
-      }
-      // 右
-    } else if (tmpTrindex == MidNum - 1 && MidNum - 1 < tdIndex) {
-      for (let i = tdIndex; tmpTrindex <= 4; i--) {
-        slantArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex + 1;
-      }
-
-      tmpTrindex = trIndex;
-
-      for (let i = tdIndex; 0 <= tmpTrindex; i--) {
-        midArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex - 1;
-      }
-
-      console.log(slantArray);
-      console.log(midArray);
-
-      // Change the color
-      if (
-        fieldArray[trIndex + 1][tdIndex - 1] == 1 &&
-        fieldArray[trIndex + 2][tdIndex - 2] == 0
-      ) {
-        fieldArray[trIndex + 1][tdIndex - 1] = 0;
-        slantArray[1].children[0].classList.remove(ballColorBlack);
-        slantArray[1].children[0].classList.add(ballColorWhite);
-      }
-
-      if (
-        fieldArray[trIndex - 1][tdIndex - 1] == 1 &&
-        fieldArray[trIndex - 2][tdIndex - 2] == 0
-      ) {
-        fieldArray[trIndex - 1][tdIndex - 1] = 0;
-        midArray[1].children[0].classList.remove(ballColorBlack);
-        midArray[1].children[0].classList.add(ballColorWhite);
-      }
-      // 真ん中
-    } else if (tmpTrindex == MidNum - 1 && tdIndex == MidNum - 1) {
-      tmpTrindex = 0;
-      for (let i = 0; i <= 4; i++) {
-        slantArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex + 1;
-      }
-
-      tmpTrindex = 4;
-      for (let i = 0; i <= 4; i++) {
-        midArray.push(trs[tmpTrindex].children[i]);
-        tmpTrindex = tmpTrindex - 1;
-      }
-
-      if (
-        fieldArray[trIndex + 1][tdIndex + 1] == 1 &&
-        fieldArray[trIndex + 2][tdIndex + 2] == 0
-      ) {
-        fieldArray[trIndex + 1][tdIndex + 1] = 0;
-        slantArray[3].children[0].classList.remove(ballColorBlack);
-        slantArray[3].children[0].classList.add(ballColorWhite);
-      }
-      if (
-        fieldArray[trIndex - 1][tdIndex - 1] == 1 &&
-        fieldArray[trIndex - 2][tdIndex - 2] == 0
-      ) {
-        fieldArray[trIndex - 1][tdIndex - 1] = 0;
-        slantArray[1].children[0].classList.remove(ballColorBlack);
-        slantArray[1].children[0].classList.add(ballColorWhite);
-      }
-      if (
-        fieldArray[trIndex - 1][tdIndex + 1] == 1 &&
-        fieldArray[trIndex - 2][tdIndex + 2] == 0
-      ) {
-        fieldArray[trIndex - 1][tdIndex + 1] = 0;
-        midArray[3].children[0].classList.remove(ballColorBlack);
-        midArray[3].children[0].classList.add(ballColorWhite);
-      }
-      if (
-        fieldArray[trIndex + 1][tdIndex - 1] == 1 &&
-        fieldArray[trIndex + 2][tdIndex - 2] == 0
-      ) {
-        fieldArray[trIndex + 1][tdIndex - 1] = 0;
-        midArray[1].children[0].classList.remove(ballColorBlack);
-        midArray[1].children[0].classList.add(ballColorWhite);
-      }
-    }
-
-    console.log(flag);
-    if (minSlantTrIndex != null && maxSlantTrIndex != null) {
-      let slantColorFlag = true;
-      if (flag == "rightUp") {
-        for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
-          if (fieldArray[c][tdIndex - 1] == 2) {
-            slantColorFlag = false;
-            console.log("falseeee");
+      console.log(flag);
+      if (minSlantTrIndex != null && maxSlantTrIndex != null) {
+        let slantColorFlag = true;
+        if (flag == "rightUp") {
+          for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
+            if (fieldArray[c][tdIndex - 1] == 2) {
+              slantColorFlag = false;
+              console.log("falseeee");
+            }
+            tdIndex = tdIndex - 1;
           }
-          tdIndex = tdIndex - 1;
-        }
-      } else if (flag == "leftDown") {
-        console.log(tdIndex + "tdindex");
-        for (let c = maxSlantTrIndex - 1; minSlantTrIndex < c; c--) {
-          if (fieldArray[c][tdIndex + 1] == 2) {
-            slantColorFlag = false;
-            console.log("falseeeetwooooo");
+        } else if (flag == "leftDown") {
+          console.log(tdIndex + "tdindex");
+          for (let c = maxSlantTrIndex - 1; minSlantTrIndex < c; c--) {
+            if (fieldArray[c][tdIndex + 1] == 2) {
+              slantColorFlag = false;
+              console.log("falseeeetwooooo");
+            }
+            tdIndex = tdIndex + 1;
           }
-          tdIndex = tdIndex + 1;
-        }
-      } else if (flag == "leftUp") {
-        for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
-          if (fieldArray[c][tdIndex + 1] == 2) {
-            slantColorFlag = false;
-            console.log("falseeee");
+        } else if (flag == "leftUp") {
+          for (let c = minSlantTrIndex + 1; c < maxSlantTrIndex; c++) {
+            if (fieldArray[c][tdIndex + 1] == 2) {
+              slantColorFlag = false;
+              console.log("falseeee");
+            }
+            tdIndex = tdIndex + 1;
           }
-          tdIndex = tdIndex + 1;
-        }
-      } else if (flag == "rightDown") {
-        for (let c = maxSlantTrIndex - 1; minSlantTrIndex < c; c--) {
-          if (fieldArray[c][tdIndex - 1] == 2) {
-            slantColorFlag = false;
-            console.log("falseeee");
+        } else if (flag == "rightDown") {
+          for (let c = maxSlantTrIndex - 1; minSlantTrIndex < c; c--) {
+            if (fieldArray[c][tdIndex - 1] == 2) {
+              slantColorFlag = false;
+              console.log("falseeee");
+            }
+            tdIndex = tdIndex - 1;
           }
-          tdIndex = tdIndex - 1;
         }
-      }
 
-      console.log(testTd + "testTd");
-      if (slantColorFlag == true && (flag == "rightUp" || flag == "leftDown")) {
-        for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i--) {
-          fieldArray[minSlantTrIndex + 1][i - 1] = 0;
-          trs[minSlantTrIndex + 1].children[i - 1].children[0].classList.remove(
-            ballColorBlack
-          );
-          trs[minSlantTrIndex + 1].children[i - 1].children[0].classList.add(
-            ballColorWhite
-          );
-          minSlantTrIndex = minSlantTrIndex + 1;
-        }
-      } else if (
-        slantColorFlag == true &&
-        (flag == "leftUp" || flag == "rightDown")
-      ) {
-        for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i++) {
-          fieldArray[minSlantTrIndex + 1][i + 1] = 0;
-          trs[minSlantTrIndex + 1].children[i + 1].children[0].classList.remove(
-            ballColorBlack
-          );
-          trs[minSlantTrIndex + 1].children[i + 1].children[0].classList.add(
-            ballColorWhite
-          );
-          minSlantTrIndex = minSlantTrIndex + 1;
+        console.log(testTd + "testTd");
+        if (
+          slantColorFlag == true &&
+          (flag == "rightUp" || flag == "leftDown")
+        ) {
+          for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i--) {
+            fieldArray[minSlantTrIndex + 1][i - 1] = 0;
+            trs[minSlantTrIndex + 1].children[
+              i - 1
+            ].children[0].classList.remove(ballColorBlack);
+            trs[minSlantTrIndex + 1].children[i - 1].children[0].classList.add(
+              ballColorWhite
+            );
+            minSlantTrIndex = minSlantTrIndex + 1;
+          }
+        } else if (
+          slantColorFlag == true &&
+          (flag == "leftUp" || flag == "rightDown")
+        ) {
+          for (let i = testTd; minSlantTrIndex < maxSlantTrIndex; i++) {
+            fieldArray[minSlantTrIndex + 1][i + 1] = 0;
+            trs[minSlantTrIndex + 1].children[
+              i + 1
+            ].children[0].classList.remove(ballColorBlack);
+            trs[minSlantTrIndex + 1].children[i + 1].children[0].classList.add(
+              ballColorWhite
+            );
+            minSlantTrIndex = minSlantTrIndex + 1;
+          }
         }
       }
-    }
     }
   }
 
@@ -1200,4 +1109,72 @@
       colorFlag = true;
     }
   });
+
+  // Finding minTdIndex for side array
+  function findMinTdIndex(
+    currentColorNum,
+    oppositeColorNum,
+    trIndex,
+    minTdIndex
+  ) {
+    for (let i = 0; i < fieldArray[trIndex].length; i++) {
+      if (
+        fieldArray[trIndex][i] == currentColorNum &&
+        fieldArray[trIndex][i + 1] == oppositeColorNum &&
+        minTdIndex == null
+      ) {
+        minTdIndex = i;
+      }
+    }
+    return minTdIndex;
+  }
+
+  // Finding maxTdIndex for side array
+  function findMaxTdIndex(
+    currentColorNum,
+    oppositeColorNum,
+    trIndex,
+    maxTdIndex,
+    minTdIndex
+  ) {
+    for (let i = 0; i < fieldArray[trIndex].length; i++) {
+      if (
+        minTdIndex != null &&
+        fieldArray[trIndex][i] == currentColorNum &&
+        fieldArray[trIndex][i - 1] == oppositeColorNum
+      ) {
+        maxTdIndex = i;
+      }
+    }
+    return maxTdIndex;
+  }
+
+//   Change ball(divs color)
+  function changeSideArrayColor(
+    minTdIndex,
+    maxTdIndex,
+    trIndex,
+    currentColorNum,
+    selectedTds,
+    removeColor,
+    addColor
+  ) {
+    if (minTdIndex != null && maxTdIndex != null) {
+      let flag = true;
+      for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
+        // To stop next code
+        if (fieldArray[trIndex][c] == 2) {
+          flag = false;
+        }
+      }
+
+      if (flag == true) {
+        for (let b = minTdIndex + 1; b < maxTdIndex; b++) {
+          fieldArray[trIndex][b] = currentColorNum;
+          selectedTds[b].children[0].classList.remove(removeColor);
+          selectedTds[b].children[0].classList.add(addColor);
+        }
+      }
+    }
+  }
 </script>
