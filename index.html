@@ -54,8 +54,7 @@
   </body>
 </html>
 <script>
-    // start code 1200
-
+  // start code 1200
 
   // white = 0, balck = 1
   let fieldArray = [
@@ -109,13 +108,7 @@
 
       // Finding minTdIndex and maxTdIndex
       minTdIndex = findMinTdIndex(1, 0, trIndex, minTdIndex);
-      maxTdIndex = findMaxTdIndex(
-        1,
-        0,
-        trIndex,
-        maxTdIndex,
-        findMinTdIndex(1, 0, trIndex, minTdIndex)
-      );
+      maxTdIndex = findMaxTdIndex(1, 0, trIndex, maxTdIndex, minTdIndex);
 
       changeSideArrayColor(
         minTdIndex,
@@ -131,51 +124,35 @@
 
       // Creating VerticalArray
       let VerticalArray = [];
-      trs.forEach((tr) => {
-        VerticalArray.push(tr.children[tdIndex]);
-      });
+      crateVartivalArray(trs, VerticalArray,tdIndex)
 
       let minVerticalTdIndex = null;
       let maxVerticalTdIndex = null;
-      for (let i = 0; i < fieldArray.length; i++) {
-        if (
-          minVerticalTdIndex != null &&
-          fieldArray[i][tdIndex] == 1 &&
-          fieldArray[i - 1][tdIndex] == 0
-        ) {
-          maxVerticalTdIndex = i;
-        }
 
-        // when  i == 4 , can't  do [i + 1]
-        if (fieldArray.length == i + 1) {
-          break;
-        }
+      minVerticalTdIndex = findVarticalMinTdIndex(
+        minVerticalTdIndex,
+        tdIndex,
+        1,
+        0
+      );
 
-        if (
-          fieldArray[i][tdIndex] == 1 &&
-          fieldArray[i + 1][tdIndex] == 0 &&
-          minVerticalTdIndex == null
-        ) {
-          minVerticalTdIndex = i;
-        }
-      }
+      maxVerticalTdIndex = findVarticalMaxTdIndex(
+        minVerticalTdIndex,
+        maxVerticalTdIndex,
+        tdIndex,
+        1,
+        0
+      );
 
-      if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
-        let verticalColorFlag = true;
-        for (let c = minVerticalTdIndex + 1; c < maxVerticalTdIndex; c++) {
-          if (fieldArray[c][tdIndex] == 2) {
-            verticalColorFlag = false;
-          }
-        }
-
-        if (verticalColorFlag == true) {
-          for (let b = minVerticalTdIndex + 1; b < maxVerticalTdIndex; b++) {
-            fieldArray[b][tdIndex] = 1;
-            VerticalArray[b].children[0].classList.remove(ballColorWhite);
-            VerticalArray[b].children[0].classList.add(ballColorBlack);
-          }
-        }
-      }
+      changeVarticalColor(
+        minVerticalTdIndex,
+        maxVerticalTdIndex,
+        tdIndex,
+        1,
+        ballColorWhite,
+        ballColorBlack,
+        VerticalArray
+      );
 
       // slant (斜め)
       let slantArray = [];
@@ -595,8 +572,6 @@
           }
         }
       }
-
-      console.log(fieldArray);
     } else {
       // white
 
@@ -606,13 +581,7 @@
       let maxTdIndex = null;
 
       minTdIndex = findMinTdIndex(0, 1, trIndex, minTdIndex);
-      maxTdIndex = findMaxTdIndex(
-        0,
-        1,
-        trIndex,
-        maxTdIndex,
-        findMinTdIndex(0, 1, trIndex, minTdIndex)
-      );
+      maxTdIndex = findMaxTdIndex(0, 1, trIndex, maxTdIndex, minTdIndex);
 
       changeSideArrayColor(
         minTdIndex,
@@ -627,51 +596,35 @@
       // Vertical （縦）
 
       let VerticalArray = [];
-      trs.forEach((tr) => {
-        VerticalArray.push(tr.children[tdIndex]);
-      });
+      crateVartivalArray(trs, VerticalArray,tdIndex);
 
       let minVerticalTdIndex = null;
       let maxVerticalTdIndex = null;
-      for (let i = 0; i < fieldArray.length; i++) {
-        if (
-          minVerticalTdIndex != null &&
-          fieldArray[i][tdIndex] == 0 &&
-          fieldArray[i - 1][tdIndex] == 1
-        ) {
-          maxVerticalTdIndex = i;
-        }
 
-        // when  i == 4 , can't  do [i + 1]
-        if (fieldArray.length == i + 1) {
-          break;
-        }
+      minVerticalTdIndex = findVarticalMinTdIndex(
+        minVerticalTdIndex,
+        tdIndex,
+        0,
+        1
+      );
 
-        if (
-          fieldArray[i][tdIndex] == 0 &&
-          fieldArray[i + 1][tdIndex] == 1 &&
-          minVerticalTdIndex == null
-        ) {
-          minVerticalTdIndex = i;
-        }
-      }
+      maxVerticalTdIndex = findVarticalMaxTdIndex(
+        minVerticalTdIndex,
+        maxVerticalTdIndex,
+        tdIndex,
+        0,
+        1
+      );
 
-      if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
-        let verticalColorFlag = true;
-        for (let c = minVerticalTdIndex + 1; c < maxVerticalTdIndex; c++) {
-          if (fieldArray[c][tdIndex] == 2) {
-            verticalColorFlag = false;
-          }
-        }
-
-        if (verticalColorFlag == true) {
-          for (let b = minVerticalTdIndex + 1; b < maxVerticalTdIndex; b++) {
-            fieldArray[b][tdIndex] = 0;
-            VerticalArray[b].children[0].classList.remove(ballColorBlack);
-            VerticalArray[b].children[0].classList.add(ballColorWhite);
-          }
-        }
-      }
+      changeVarticalColor(
+        minVerticalTdIndex,
+        maxVerticalTdIndex,
+        tdIndex,
+        0,
+        ballColorBlack,
+        ballColorWhite,
+        VerticalArray
+      );
 
       // 斜め
 
@@ -1149,7 +1102,7 @@
     return maxTdIndex;
   }
 
-//   Change ball(divs color)
+  //   Change ball(divs color)
   function changeSideArrayColor(
     minTdIndex,
     maxTdIndex,
@@ -1173,6 +1126,81 @@
           fieldArray[trIndex][b] = currentColorNum;
           selectedTds[b].children[0].classList.remove(removeColor);
           selectedTds[b].children[0].classList.add(addColor);
+        }
+      }
+    }
+  }
+
+  function crateVartivalArray(trs, VerticalArray,tdIndex) {
+    trs.forEach((tr) => {
+      VerticalArray.push(tr.children[tdIndex]);
+    });
+  }
+
+  function findVarticalMinTdIndex(
+    minVerticalTdIndex,
+    tdIndex,
+    currentColorNum,
+    oppositeColorNum
+  ) {
+    for (let i = 0; i < fieldArray.length; i++) {
+      // when  i == 4 , can't  do [i + 1]
+      if (fieldArray.length == i + 1) {
+        break;
+      }
+
+      if (
+        fieldArray[i][tdIndex] == currentColorNum &&
+        fieldArray[i + 1][tdIndex] == oppositeColorNum &&
+        minVerticalTdIndex == null
+      ) {
+        minVerticalTdIndex = i;
+      }
+    }
+    return minVerticalTdIndex;
+  }
+
+  function findVarticalMaxTdIndex(
+    minVerticalTdIndex,
+    maxVerticalTdIndex,
+    tdIndex,
+    currentColorNum,
+    oppositeColorNum
+  ) {
+    for (let i = 2; i < fieldArray.length; i++) {
+      if (
+        minVerticalTdIndex != null &&
+        fieldArray[i][tdIndex] == currentColorNum &&
+        fieldArray[i - 1][tdIndex] == oppositeColorNum
+      ) {
+        maxVerticalTdIndex = i;
+      }
+    }
+    return maxVerticalTdIndex;
+  }
+
+  function changeVarticalColor(
+    minVerticalTdIndex,
+    maxVerticalTdIndex,
+    tdIndex,
+    currentColorNum,
+    removeColor,
+    addColor,
+    VerticalArray
+  ) {
+    if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
+      let verticalColorFlag = true;
+      for (let c = minVerticalTdIndex + 1; c < maxVerticalTdIndex; c++) {
+        if (fieldArray[c][tdIndex] == 2) {
+          verticalColorFlag = false;
+        }
+      }
+
+      if (verticalColorFlag == true) {
+        for (let b = minVerticalTdIndex + 1; b < maxVerticalTdIndex; b++) {
+          fieldArray[b][tdIndex] = currentColorNum;
+          VerticalArray[b].children[0].classList.remove(removeColor);
+          VerticalArray[b].children[0].classList.add(addColor);
         }
       }
     }
