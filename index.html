@@ -118,7 +118,8 @@
         1,
         selectedTds,
         ballColorWhite,
-        ballColorBlack
+        ballColorBlack,
+        tdIndex
       );
 
       // Vertical （縦）
@@ -152,7 +153,8 @@
         1,
         ballColorWhite,
         ballColorBlack,
-        VerticalArray
+        VerticalArray,
+        trIndex
       );
 
       // slant (斜め)
@@ -160,7 +162,7 @@
       let midArray = [];
       let MidNum = 0;
       MidNum = calMidNum(MidNum);
-      
+
       let count = 4;
 
       // To save trIndex
@@ -334,8 +336,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,slantArray,1,"plus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,midArray,1,"plusMinus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          slantArray,
+          1,
+          "plus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          midArray,
+          1,
+          "plusMinus"
+        );
 
         // 左
       } else if (tmpTrindex == MidNum - 1 && tdIndex < MidNum - 1) {
@@ -352,8 +374,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,slantArray,1,"minusPlus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,midArray,1,"plus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          slantArray,
+          1,
+          "minusPlus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          midArray,
+          1,
+          "plus"
+        );
 
         // 下
       } else if (MidNum - 1 < tmpTrindex && tdIndex == MidNum - 1) {
@@ -370,8 +412,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,slantArray,1,"minusPlus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,midArray,1,"minus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          slantArray,
+          1,
+          "minusPlus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          midArray,
+          1,
+          "minus"
+        );
 
         // 右
       } else if (tmpTrindex == MidNum - 1 && MidNum - 1 < tdIndex) {
@@ -388,9 +450,29 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,slantArray,1,"plusMinus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,midArray,1,"minus")
-       
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          slantArray,
+          1,
+          "plusMinus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          midArray,
+          1,
+          "minus"
+        );
+
         // 真ん中
       } else if (tmpTrindex == MidNum - 1 && tdIndex == MidNum - 1) {
         tmpTrindex = 0;
@@ -405,10 +487,50 @@
           tmpTrindex = tmpTrindex - 1;
         }
 
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,slantArray,3,"plus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,slantArray,1,"minus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,midArray,3,"minusPlus")
-        changeCenterArrayColor(trIndex,tdIndex,1,0,ballColorWhite,ballColorBlack,midArray,1,"plusMinus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          slantArray,
+          3,
+          "plus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          slantArray,
+          1,
+          "minus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          midArray,
+          3,
+          "minusPlus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          1,
+          0,
+          ballColorWhite,
+          ballColorBlack,
+          midArray,
+          1,
+          "plusMinus"
+        );
       }
 
       if (minSlantTrIndex != null && maxSlantTrIndex != null) {
@@ -487,7 +609,8 @@
 
       minTdIndex = findMinTdIndex(0, 1, trIndex, minTdIndex);
       maxTdIndex = findMaxTdIndex(0, 1, trIndex, maxTdIndex, minTdIndex);
-
+      console.log(maxTdIndex);
+      console.log(minTdIndex);
       changeSideArrayColor(
         minTdIndex,
         maxTdIndex,
@@ -495,7 +618,8 @@
         0,
         selectedTds,
         ballColorBlack,
-        ballColorWhite
+        ballColorWhite,
+        tdIndex
       );
 
       // Vertical （縦）
@@ -528,7 +652,8 @@
         0,
         ballColorBlack,
         ballColorWhite,
-        VerticalArray
+        VerticalArray,
+        trIndex
       );
 
       // 斜め
@@ -709,8 +834,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,slantArray,1,"plus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,midArray,1,"plusMinus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          slantArray,
+          1,
+          "plus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          midArray,
+          1,
+          "plusMinus"
+        );
 
         // 左
       } else if (tmpTrindex == MidNum - 1 && tdIndex < MidNum - 1) {
@@ -727,8 +872,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,slantArray,1,"minusPlus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,midArray,1,"plus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          slantArray,
+          1,
+          "minusPlus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          midArray,
+          1,
+          "plus"
+        );
 
         // 下
       } else if (MidNum - 1 < tmpTrindex && tdIndex == MidNum - 1) {
@@ -745,8 +910,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,slantArray,1,"minusPlus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,midArray,1,"minus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          slantArray,
+          1,
+          "minusPlus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          midArray,
+          1,
+          "minus"
+        );
 
         // 右
       } else if (tmpTrindex == MidNum - 1 && MidNum - 1 < tdIndex) {
@@ -763,8 +948,28 @@
         }
 
         // Change the color
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,slantArray,1,"plusMinus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,midArray,1,"minus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          slantArray,
+          1,
+          "plusMinus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          midArray,
+          1,
+          "minus"
+        );
 
         // 真ん中
       } else if (tmpTrindex == MidNum - 1 && tdIndex == MidNum - 1) {
@@ -780,10 +985,50 @@
           tmpTrindex = tmpTrindex - 1;
         }
 
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,slantArray,3,"plus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,slantArray,1,"minus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,midArray,3,"minusPlus")
-        changeCenterArrayColor(trIndex,tdIndex,0,1,ballColorBlack,ballColorWhite,midArray,1,"plusMinus")
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          slantArray,
+          3,
+          "plus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          slantArray,
+          1,
+          "minus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          midArray,
+          3,
+          "minusPlus"
+        );
+        changeCenterArrayColor(
+          trIndex,
+          tdIndex,
+          0,
+          1,
+          ballColorBlack,
+          ballColorWhite,
+          midArray,
+          1,
+          "plusMinus"
+        );
       }
 
       if (minSlantTrIndex != null && maxSlantTrIndex != null) {
@@ -873,15 +1118,23 @@
     }
   });
 
-  btn[1].addEventListener("click",()=>resetGame())
+  btn[1].addEventListener("click", () => resetGame());
 
-  function resetGame(){
+  function resetGame() {
     let tds = document.getElementsByTagName("td");
-   for(let td of tds){
-    if(td.children[0]!=null){
-        td.children[0].remove()
+    for (let td of tds) {
+      if (td.children[0] != null) {
+        td.children[0].remove();
+      }
     }
-   }
+    fieldArray = [
+      [2, 2, 2, 2, 2],
+      [2, 2, 2, 2, 2],
+      [2, 2, 2, 2, 2],
+      [2, 2, 2, 2, 2],
+      [2, 2, 2, 2, 2],
+    ];
+    console.log(fieldArray);
   }
 
   // Finding minTdIndex for side array
@@ -931,13 +1184,19 @@
     currentColorNum,
     selectedTds,
     removeColor,
-    addColor
+    addColor,
+    tdIndex
   ) {
     if (minTdIndex != null && maxTdIndex != null) {
       let flag = true;
       for (let c = minTdIndex + 1; c < maxTdIndex; c++) {
         // To stop next code
         if (fieldArray[trIndex][c] == 2) {
+          flag = false;
+        }
+        if (maxTdIndex == tdIndex || minTdIndex == tdIndex) {
+          flag = true;
+        } else {
           flag = false;
         }
       }
@@ -1007,7 +1266,8 @@
     currentColorNum,
     removeColor,
     addColor,
-    VerticalArray
+    VerticalArray,
+    trIndex
   ) {
     if (minVerticalTdIndex != null && maxVerticalTdIndex != null) {
       let verticalColorFlag = true;
@@ -1015,6 +1275,11 @@
         if (fieldArray[c][tdIndex] == 2) {
           verticalColorFlag = false;
         }
+      }
+      if (minVerticalTdIndex == trIndex || maxVerticalTdIndex == trIndex) {
+        verticalColorFlag = true;
+      } else {
+        verticalColorFlag = false
       }
 
       if (verticalColorFlag == true) {
@@ -1036,44 +1301,53 @@
     return MidNum;
   }
 
-  function changeCenterArrayColor(trIndex,tdIndex,currentColorNum,oppositeColorNum,removeColor,addColor,changeArray,changeArrayIndex,cal){
-    if(cal=="plus"){
-        if (
-          fieldArray[trIndex + 1][tdIndex + 1] == oppositeColorNum &&
-          fieldArray[trIndex + 2][tdIndex + 2] == currentColorNum
-        ) {
-          fieldArray[trIndex + 1][tdIndex + 1] = currentColorNum;
-         changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
+  function changeCenterArrayColor(
+    trIndex,
+    tdIndex,
+    currentColorNum,
+    oppositeColorNum,
+    removeColor,
+    addColor,
+    changeArray,
+    changeArrayIndex,
+    cal
+  ) {
+    if (cal == "plus") {
+      if (
+        fieldArray[trIndex + 1][tdIndex + 1] == oppositeColorNum &&
+        fieldArray[trIndex + 2][tdIndex + 2] == currentColorNum
+      ) {
+        fieldArray[trIndex + 1][tdIndex + 1] = currentColorNum;
+        changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
         changeArray[changeArrayIndex].children[0].classList.add(addColor);
-        }
-    }else if(cal=="minus"){
-        if (
-          fieldArray[trIndex - 1][tdIndex - 1] == oppositeColorNum &&
-          fieldArray[trIndex - 2][tdIndex - 2] == currentColorNum
-        ) {
-          fieldArray[trIndex - 1][tdIndex - 1] = currentColorNum;
-          changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
-          changeArray[changeArrayIndex].children[0].classList.add(addColor);
-        }
-    }else if(cal=="minusPlus"){
-        if (
-          fieldArray[trIndex - 1][tdIndex + 1] == oppositeColorNum &&
-          fieldArray[trIndex - 2][tdIndex + 2] == currentColorNum
-        ) {
-          fieldArray[trIndex - 1][tdIndex + 1] = currentColorNum;
-          changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
-          changeArray[changeArrayIndex].children[0].classList.add(addColor);
-        }
-    }else if(cal=="plusMinus"){
-        if (
-          fieldArray[trIndex + 1][tdIndex - 1] == oppositeColorNum &&
-          fieldArray[trIndex + 2][tdIndex - 2] == currentColorNum
-        ) {
-          fieldArray[trIndex + 1][tdIndex - 1] = currentColorNum;
-          changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
-          changeArray[changeArrayIndex].children[0].classList.add(addColor);
-        }
+      }
+    } else if (cal == "minus") {
+      if (
+        fieldArray[trIndex - 1][tdIndex - 1] == oppositeColorNum &&
+        fieldArray[trIndex - 2][tdIndex - 2] == currentColorNum
+      ) {
+        fieldArray[trIndex - 1][tdIndex - 1] = currentColorNum;
+        changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
+        changeArray[changeArrayIndex].children[0].classList.add(addColor);
+      }
+    } else if (cal == "minusPlus") {
+      if (
+        fieldArray[trIndex - 1][tdIndex + 1] == oppositeColorNum &&
+        fieldArray[trIndex - 2][tdIndex + 2] == currentColorNum
+      ) {
+        fieldArray[trIndex - 1][tdIndex + 1] = currentColorNum;
+        changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
+        changeArray[changeArrayIndex].children[0].classList.add(addColor);
+      }
+    } else if (cal == "plusMinus") {
+      if (
+        fieldArray[trIndex + 1][tdIndex - 1] == oppositeColorNum &&
+        fieldArray[trIndex + 2][tdIndex - 2] == currentColorNum
+      ) {
+        fieldArray[trIndex + 1][tdIndex - 1] = currentColorNum;
+        changeArray[changeArrayIndex].children[0].classList.remove(removeColor);
+        changeArray[changeArrayIndex].children[0].classList.add(addColor);
+      }
     }
   }
-
 </script>
