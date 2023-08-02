@@ -50,6 +50,7 @@
         </tbody>
       </table>
       <button>SKIP</button>
+      <button>New Game</button>
     </section>
   </body>
 </html>
@@ -863,14 +864,25 @@
   }
 
   //   Skip button to change class(falg)
-  let btn = document.getElementsByTagName("button")[0];
-  btn.addEventListener("click", () => {
+  let btn = document.getElementsByTagName("button");
+  btn[0].addEventListener("click", () => {
     if (colorFlag == true) {
       colorFlag = false;
     } else {
       colorFlag = true;
     }
   });
+
+  btn[1].addEventListener("click",()=>resetGame())
+
+  function resetGame(){
+    let tds = document.getElementsByTagName("td");
+   for(let td of tds){
+    if(td.children[0]!=null){
+        td.children[0].remove()
+    }
+   }
+  }
 
   // Finding minTdIndex for side array
   function findMinTdIndex(
